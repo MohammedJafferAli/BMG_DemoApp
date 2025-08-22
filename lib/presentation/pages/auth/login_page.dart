@@ -5,6 +5,7 @@ import '../../blocs/auth/auth_bloc.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/theme_switcher.dart';
+import '../../widgets/animated_logo.dart';
 import 'register_page.dart';
 import '../home/home_page.dart';
 
@@ -51,11 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Spacer(),
-                  const Icon(
-                    Icons.hotel,
-                    size: 80,
-                    color: AppColors.primary,
-                  ),
+                  const AnimatedLogo(size: 80),
                   const SizedBox(height: 16),
                   const Text(
                     'Welcome Back',

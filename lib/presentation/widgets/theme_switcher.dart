@@ -15,7 +15,7 @@ class ThemeSwitcher extends StatelessWidget {
           height: 20,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: state.isDarkMode ? AppColors.darkSurface : AppColors.background,
+            color: state.isDarkMode ? AppColors.textPrimary : AppColors.textSecondary,
           ),
           child: Stack(
             children: [

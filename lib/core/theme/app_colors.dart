@@ -17,7 +17,7 @@ class AppColors {
   static const Color accentDark = Color(0xFFE8D5B7);
   
   // Background Colors - Sophisticated Neutrals
-  static const Color background = Color(0xFFFAF9F7); // Off White
+  static const Color background = Color(0xFFFFDB58); // Mustard Yellow
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFF0EDE8); // Warm Gray
   

@@ -36,14 +36,21 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Spacer(),
+          child: Stack(
+            children: [
+              const Positioned(
+                top: 16,
+                left: 16,
+                child: ThemeSwitcher(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Spacer(),
                   const Icon(
                     Icons.hotel,
                     size: 80,
@@ -68,14 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ThemeSwitcher(),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 48),
                   CustomTextField(
                     controller: _emailController,
                     label: 'Email',
@@ -141,10 +141,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  const Spacer(),
-                ],
+                      const Spacer(),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

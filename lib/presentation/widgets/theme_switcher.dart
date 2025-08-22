@@ -11,29 +11,29 @@ class ThemeSwitcher extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return Container(
-          width: 80,
-          height: 40,
+          width: 40,
+          height: 20,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: state.isDarkMode ? Colors.grey[800] : Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+            color: state.isDarkMode ? AppColors.darkSurface : AppColors.background,
           ),
           child: Stack(
             children: [
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                left: state.isDarkMode ? 40 : 0,
+                left: state.isDarkMode ? 20 : 0,
                 child: GestureDetector(
                   onTap: () => context.read<ThemeBloc>().add(const ThemeToggled()),
                   child: Container(
-                    width: 40,
-                    height: 40,
+                    width: 20,
+                    height: 20,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: state.isDarkMode ? AppColors.primary : Colors.orange,
+                      color: state.isDarkMode ? AppColors.accent : AppColors.primary,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           blurRadius: 4,
                           offset: const Offset(0, 2),
                         ),
@@ -42,7 +42,7 @@ class ThemeSwitcher extends StatelessWidget {
                     child: Icon(
                       state.isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
                       color: Colors.white,
-                      size: 20,
+                      size: 10,
                     ),
                   ),
                 ),

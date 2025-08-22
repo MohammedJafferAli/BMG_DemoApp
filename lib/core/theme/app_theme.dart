@@ -68,7 +68,7 @@ class AppTheme {
         seedColor: AppColors.primary,
         brightness: Brightness.dark,
       ),
-      scaffoldBackgroundColor: const Color(0xFF121212),
+      scaffoldBackgroundColor: AppColors.darkBackground,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -107,7 +107,7 @@ class AppTheme {
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         filled: true,
-        fillColor: const Color(0xFF1E1E1E),
+        fillColor: AppColors.darkSurface,
         contentPadding: const EdgeInsets.all(16),
       ),
       cardTheme: CardTheme(
@@ -115,7 +115,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        color: const Color(0xFF1E1E1E),
+        color: AppColors.darkSurface,
       ),
     );
   }

@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/theme_switcher.dart';
 import 'register_page.dart';
 import '../home/home_page.dart';
 
@@ -67,7 +68,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ThemeSwitcher(),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
                   CustomTextField(
                     controller: _emailController,
                     label: 'Email',

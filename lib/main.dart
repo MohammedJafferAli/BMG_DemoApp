@@ -6,6 +6,7 @@ import 'core/di/injection_container.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/booking/booking_bloc.dart';
 import 'presentation/blocs/listings/listings_bloc.dart';
+import 'presentation/blocs/theme/theme_bloc.dart';
 import 'presentation/pages/splash/splash_page.dart';
 
 void main() async {
@@ -27,12 +28,19 @@ class BMGApp extends StatelessWidget {
         BlocProvider(create: (_) => getIt<AuthBloc>()),
         BlocProvider(create: (_) => getIt<ListingsBloc>()),
         BlocProvider(create: (_) => getIt<BookingBloc>()),
+        BlocProvider(create: (_) => ThemeBloc()),
       ],
-      child: MaterialApp(
-        title: 'BMG',
-        theme: AppTheme.lightTheme,
-        debugShowCheckedModeBanner: false,
-        home: const SplashPage(),
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, themeState) {
+          return MaterialApp(
+            title: 'BMG',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            home: const SplashPage(),
+          );
+        },
       ),
     );
   }

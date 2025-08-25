@@ -6,6 +6,7 @@ import '../../blocs/listings/listings_bloc.dart';
 import '../../widgets/listing_card.dart';
 import '../../widgets/search_bar.dart';
 import '../../widgets/search_filters.dart';
+import '../map/map_view_page.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -19,6 +20,10 @@ class SearchPage extends StatelessWidget {
         backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.map),
+            onPressed: () => _showMapView(context),
+          ),
           IconButton(
             icon: const Icon(Icons.tune),
             onPressed: () => _showFilters(context),
@@ -130,11 +135,22 @@ class SearchPage extends StatelessWidget {
         minChildSize: 0.5,
         builder: (context, scrollController) => SearchFilters(
           onFiltersChanged: (filters) {
-            // TODO: Apply filters to search
             Navigator.pop(context);
           },
         ),
       ),
     );
+  }
+
+  void _showMapView(BuildContext context) {
+    final state = context.read<ListingsBloc>().state;
+    if (state is ListingsLoaded) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MapViewPage(listings: state.listings),
+        ),
+      );
+    }
   }
 }

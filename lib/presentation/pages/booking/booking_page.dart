@@ -9,6 +9,7 @@ import '../../blocs/booking/booking_bloc.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/price_breakdown.dart';
 import '../auth/login_page.dart';
+import '../payment/payment_page.dart';
 
 class BookingPage extends StatefulWidget {
   final Listing listing;
@@ -343,16 +344,18 @@ class _BookingPageState extends State<BookingPage> {
     final authState = context.read<AuthBloc>().state;
     if (authState is AuthAuthenticated) {
       final nights = _checkOutDate!.difference(_checkInDate!).inDays;
-      final totalPrice = widget.listing.price * nights;
+      final subtotal = widget.listing.price * nights;
+      final taxes = subtotal * 0.12;
+      final serviceFee = 200.0;
+      final totalPrice = subtotal + taxes + serviceFee;
 
-      context.read<BookingBloc>().add(
-        CreateBooking(
-          listingId: widget.listing.id,
-          guestId: authState.user.id,
-          checkIn: _checkInDate!,
-          checkOut: _checkOutDate!,
-          guests: _guests,
-          totalPrice: totalPrice,
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PaymentPage(
+            totalAmount: totalPrice,
+            bookingId: 'BMG${DateTime.now().millisecondsSinceEpoch}',
+          ),
         ),
       );
     }

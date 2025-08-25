@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive_utils.dart';
+import '../../widgets/custom_app_bar.dart';
 
 class HelpPage extends StatelessWidget {
   const HelpPage({super.key});
@@ -8,11 +9,9 @@ class HelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Help & Support'),
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+      appBar: const CustomAppBar(
+        title: 'Help & Support',
+        showBackButton: false,
       ),
       body: Center(
         child: Container(

@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/user.dart';
 import '../../blocs/auth/auth_bloc.dart';
+import '../../widgets/custom_app_bar.dart';
 import '../auth/login_page.dart';
 import '../auth/register_page.dart';
 
@@ -13,9 +14,9 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        automaticallyImplyLeading: false,
+      appBar: const CustomAppBar(
+        title: 'Profile',
+        showBackButton: false,
       ),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {

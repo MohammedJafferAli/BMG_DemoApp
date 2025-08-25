@@ -6,8 +6,8 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/theme_switcher.dart';
 import '../../widgets/animated_logo.dart';
+import '../../widgets/back_button_widget.dart';
 import 'register_page.dart';
-import '../home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,9 +37,40 @@ class _LoginPageState extends State<LoginPage> {
         child: SafeArea(
           child: Stack(
             children: [
+              if (Navigator.of(context).canPop())
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(Icons.arrow_back_ios, size: 18),
+                          color: AppColors.textPrimary,
+                          padding: EdgeInsets.zero,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               const Positioned(
                 top: 16,
-                left: 16,
+                right: 16,
                 child: ThemeSwitcher(),
               ),
               Padding(

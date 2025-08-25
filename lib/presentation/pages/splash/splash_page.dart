@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../blocs/auth/auth_bloc.dart';
-import '../auth/login_page.dart';
 import '../home/home_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -21,9 +20,11 @@ class _SplashPageState extends State<SplashPage> {
 
   void _navigateToHome() {
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomePage()),
-      );
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      }
     });
   }
 

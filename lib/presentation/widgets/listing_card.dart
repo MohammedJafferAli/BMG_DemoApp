@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../core/theme/app_colors.dart';
 import '../../domain/entities/listing.dart';
 import '../pages/hotel/hotel_details_page.dart';
+import 'bookmark_button.dart';
 
 class ListingCard extends StatelessWidget {
   final Listing listing;
@@ -52,43 +53,61 @@ class ListingCard extends StatelessWidget {
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(borderRadius),
               ),
-              child: Container(
-                height: imageHeight,
-                width: double.infinity,
-                color: AppColors.surfaceVariant,
-                child: listing.images.isNotEmpty
-                    ? Image.network(
-                        listing.images.first,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Center(
+              child: Stack(
+                children: [
+                  Container(
+                    height: imageHeight,
+                    width: double.infinity,
+                    color: AppColors.surfaceVariant,
+                    child: listing.images.isNotEmpty
+                        ? Image.network(
+                            listing.images.first,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return Center(
+                                child: Icon(
+                                  Icons.image_not_supported_outlined,
+                                  size: isMobile ? 48 : 64,
+                                  color: AppColors.textSecondary,
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
                             child: Icon(
-                              Icons.image_not_supported_outlined,
+                              Icons.hotel_outlined,
                               size: isMobile ? 48 : 64,
                               color: AppColors.textSecondary,
                             ),
-                          );
-                        },
-                      )
-                    : Center(
-                        child: Icon(
-                          Icons.hotel_outlined,
-                          size: isMobile ? 48 : 64,
-                          color: AppColors.textSecondary,
-                        ),
+                          ),
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        shape: BoxShape.circle,
                       ),
+                      child: BookmarkButton(
+                        listing: listing,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             

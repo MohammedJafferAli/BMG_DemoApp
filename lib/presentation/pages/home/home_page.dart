@@ -5,8 +5,6 @@ import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/user.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/listings/listings_bloc.dart';
-import '../../widgets/listing_card.dart';
-import '../../widgets/search_bar.dart';
 import '../booking/bookings_page.dart';
 import '../profile/profile_page.dart';
 import '../help/help_page.dart';

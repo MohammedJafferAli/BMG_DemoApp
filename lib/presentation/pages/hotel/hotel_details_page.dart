@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/listing.dart';
 import '../../widgets/reviews_section.dart';
+import '../../widgets/top_back_button.dart';
+import '../../widgets/bookmark_button.dart';
 import '../booking/booking_page.dart';
 
 class HotelDetailsPage extends StatelessWidget {
@@ -14,30 +15,54 @@ class HotelDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          _buildImageSliver(),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(ResponsiveUtils.spacing(context)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeader(),
-                  SizedBox(height: ResponsiveUtils.spacing(context)),
-                  _buildDescription(),
-                  SizedBox(height: ResponsiveUtils.spacing(context)),
-                  _buildAmenities(),
-                  SizedBox(height: ResponsiveUtils.spacing(context)),
-                  _buildLocation(),
-                  SizedBox(height: ResponsiveUtils.spacing(context)),
-                  ReviewsSection(
-                    averageRating: listing.rating,
-                    totalReviews: listing.reviewCount,
-                    reviews: _getMockReviews(),
+      body: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              _buildImageSliver(),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(ResponsiveUtils.spacing(context)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(),
+                      SizedBox(height: ResponsiveUtils.spacing(context)),
+                      _buildDescription(),
+                      SizedBox(height: ResponsiveUtils.spacing(context)),
+                      _buildAmenities(),
+                      SizedBox(height: ResponsiveUtils.spacing(context)),
+                      _buildLocation(),
+                      SizedBox(height: ResponsiveUtils.spacing(context)),
+                      ReviewsSection(
+                        averageRating: listing.rating,
+                        totalReviews: listing.reviewCount,
+                        reviews: _getMockReviews(),
+                      ),
+                      SizedBox(height: ResponsiveUtils.spacing(context, mobile: 100)),
+                    ],
                   ),
-                  SizedBox(height: ResponsiveUtils.spacing(context, mobile: 100)),
-                ],
+                ),
+              ),
+            ],
+          ),
+          const TopBackButton(),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    shape: BoxShape.circle,
+                  ),
+                  child: BookmarkButton(
+                    listing: listing,
+                    size: 20,
+                  ),
+                ),
               ),
             ),
           ),
@@ -52,21 +77,17 @@ class HotelDetailsPage extends StatelessWidget {
       expandedHeight: 300,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        background: CarouselSlider(
-          options: CarouselOptions(
-            height: 300,
-            viewportFraction: 1.0,
-            enableInfiniteScroll: listing.images.length > 1,
-          ),
-          items: listing.images.map((image) => Container(
+        background: PageView.builder(
+          itemCount: listing.images.length,
+          itemBuilder: (context, index) => Container(
             width: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(image),
+                image: NetworkImage(listing.images[index]),
                 fit: BoxFit.cover,
               ),
             ),
-          )).toList(),
+          ),
         ),
       ),
     );

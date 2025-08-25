@@ -6,6 +6,7 @@ import 'core/di/injection_container.dart';
 import 'presentation/blocs/auth/auth_bloc.dart';
 import 'presentation/blocs/booking/booking_bloc.dart';
 import 'presentation/blocs/listings/listings_bloc.dart';
+import 'presentation/blocs/bookmark/bookmark_bloc.dart';
 import 'presentation/blocs/theme/theme_bloc.dart';
 import 'presentation/pages/splash/splash_page.dart';
 
@@ -28,6 +29,7 @@ class BMGApp extends StatelessWidget {
         BlocProvider(create: (_) => getIt<AuthBloc>()),
         BlocProvider(create: (_) => getIt<ListingsBloc>()),
         BlocProvider(create: (_) => getIt<BookingBloc>()),
+        BlocProvider(create: (_) => BookmarkBloc()),
         BlocProvider(create: (_) => ThemeBloc()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
@@ -39,6 +41,14 @@ class BMGApp extends StatelessWidget {
             themeMode: themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
             debugShowCheckedModeBanner: false,
             home: const SplashPage(),
+            builder: (context, child) {
+              return WillPopScope(
+                onWillPop: () async {
+                  return Navigator.of(context).canPop();
+                },
+                child: child!,
+              );
+            },
           );
         },
       ),

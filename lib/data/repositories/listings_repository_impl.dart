@@ -18,4 +18,10 @@ class ListingsRepositoryImpl implements ListingsRepository {
     final listingModel = await dataSource.getListingById(id);
     return listingModel.toEntity();
   }
+
+  @override
+  Future<List<Listing>> getListingsByCity(String city) async {
+    final listingModels = await dataSource.getListingsByCity(city);
+    return listingModels.map((model) => model.toEntity()).toList();
+  }
 }

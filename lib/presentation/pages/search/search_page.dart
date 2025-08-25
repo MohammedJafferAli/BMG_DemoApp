@@ -6,6 +6,7 @@ import '../../blocs/listings/listings_bloc.dart';
 import '../../widgets/listing_card.dart';
 import '../../widgets/search_bar.dart';
 import '../../widgets/search_filters.dart';
+import '../../widgets/custom_app_bar.dart';
 import '../map/map_view_page.dart';
 
 class SearchPage extends StatelessWidget {
@@ -14,11 +15,9 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Hotels'),
-        automaticallyImplyLeading: false,
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+      appBar: CustomAppBar(
+        title: 'Search Hotels',
+        showBackButton: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.map),

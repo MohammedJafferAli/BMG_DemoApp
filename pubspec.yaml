@@ -31,7 +31,6 @@ dependencies:
   cached_network_image: ^3.3.0
   shimmer: ^3.0.0
   flutter_rating_bar: ^4.0.1
-  carousel_slider: ^4.2.1
   
   # Email Service
   mailer: ^6.0.1

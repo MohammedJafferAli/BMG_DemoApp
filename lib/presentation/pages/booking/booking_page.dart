@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/listing.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/booking/booking_bloc.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/price_breakdown.dart';
+import '../auth/login_page.dart';
 
 class BookingPage extends StatefulWidget {
   final Listing listing;
@@ -30,16 +33,27 @@ class _BookingPageState extends State<BookingPage> {
       appBar: AppBar(
         title: const Text('Book Now'),
       ),
-      body: BlocListener<BookingBloc, BookingState>(
-        listener: (context, state) {
-          if (state is BookingCreated) {
-            _showBookingConfirmation(context, state.booking.orderId);
-          } else if (state is BookingError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          }
-        },
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<BookingBloc, BookingState>(
+            listener: (context, state) {
+              if (state is BookingCreated) {
+                _showBookingConfirmation(context, state.booking.orderId);
+              } else if (state is BookingError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
+              }
+            },
+          ),
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) {
+              if (state is AuthAuthenticated && _canBook()) {
+                _handleBooking();
+              }
+            },
+          ),
+        ],
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -53,12 +67,62 @@ class _BookingPageState extends State<BookingPage> {
               const SizedBox(height: 24),
               _buildPricingDetails(),
               const SizedBox(height: 32),
-              BlocBuilder<BookingBloc, BookingState>(
-                builder: (context, state) {
-                  return CustomButton(
-                    text: 'Confirm Booking',
-                    isLoading: state is BookingLoading,
-                    onPressed: _canBook() ? _handleBooking : null,
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, authState) {
+                  final isAuthenticated = authState is AuthAuthenticated;
+                  
+                  if (!isAuthenticated) {
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(ResponsiveUtils.spacing(context)),
+                          decoration: BoxDecoration(
+                            color: AppColors.info.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(
+                              ResponsiveUtils.borderRadius(context),
+                            ),
+                            border: Border.all(
+                              color: AppColors.info.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                color: AppColors.info,
+                                size: ResponsiveUtils.iconSize(context, mobile: 20),
+                              ),
+                              SizedBox(width: ResponsiveUtils.spacing(context, mobile: 8)),
+                              Expanded(
+                                child: Text(
+                                  'Sign in to complete your booking',
+                                  style: TextStyle(
+                                    fontSize: ResponsiveUtils.fontSize(context, mobile: 14),
+                                    color: AppColors.info,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: ResponsiveUtils.spacing(context)),
+                        CustomButton(
+                          text: 'Sign In to Book',
+                          onPressed: _canBook() ? _navigateToLogin : null,
+                        ),
+                      ],
+                    );
+                  }
+                  
+                  return BlocBuilder<BookingBloc, BookingState>(
+                    builder: (context, state) {
+                      return CustomButton(
+                        text: 'Confirm Booking',
+                        isLoading: state is BookingLoading,
+                        onPressed: _canBook() ? _handleBooking : null,
+                      );
+                    },
                   );
                 },
               ),
@@ -253,54 +317,10 @@ class _BookingPageState extends State<BookingPage> {
     }
 
     final nights = _checkOutDate!.difference(_checkInDate!).inDays;
-    final totalPrice = widget.listing.price * nights;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Price Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('₹${widget.listing.price.toStringAsFixed(0)} x $nights nights'),
-                Text('₹${totalPrice.toStringAsFixed(0)}'),
-              ],
-            ),
-            const Divider(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Total',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '₹${totalPrice.toStringAsFixed(0)}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    return PriceBreakdown(
+      basePrice: widget.listing.price,
+      nights: nights,
     );
   }
 
@@ -309,6 +329,14 @@ class _BookingPageState extends State<BookingPage> {
         _checkOutDate != null &&
         _checkOutDate!.isAfter(_checkInDate!) &&
         widget.listing.isAvailable;
+  }
+
+  void _navigateToLogin() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const LoginPage(),
+      ),
+    );
   }
 
   void _handleBooking() {

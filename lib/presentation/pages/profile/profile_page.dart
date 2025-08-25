@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive_utils.dart';
 import '../../../domain/entities/user.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../auth/login_page.dart';
+import '../auth/register_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -20,8 +22,101 @@ class ProfilePage extends StatelessWidget {
           if (state is AuthAuthenticated) {
             return _buildProfileContent(context, state.user);
           }
-          return const Center(child: CircularProgressIndicator());
+          return _buildGuestContent(context);
         },
+      ),
+    );
+  }
+
+  Widget _buildGuestContent(BuildContext context) {
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: ResponsiveUtils.contentMaxWidth(context)),
+        padding: EdgeInsets.all(ResponsiveUtils.spacing(context)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.person_outline,
+              size: ResponsiveUtils.iconSize(context, mobile: 80),
+              color: AppColors.primary,
+            ),
+            SizedBox(height: ResponsiveUtils.spacing(context)),
+            Text(
+              'Welcome to BMG',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.fontSize(context, mobile: 24),
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            SizedBox(height: ResponsiveUtils.spacing(context, mobile: 8)),
+            Text(
+              'Sign in to access your bookings and profile',
+              style: TextStyle(
+                fontSize: ResponsiveUtils.fontSize(context, mobile: 16),
+                color: AppColors.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: ResponsiveUtils.spacing(context, mobile: 32)),
+            SizedBox(
+              width: double.infinity,
+              height: ResponsiveUtils.minTouchTarget(context),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveUtils.borderRadius(context),
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'Sign In',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.fontSize(context, mobile: 16),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: ResponsiveUtils.spacing(context, mobile: 12)),
+            SizedBox(
+              width: double.infinity,
+              height: ResponsiveUtils.minTouchTarget(context),
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const RegisterPage()),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  side: const BorderSide(color: AppColors.primary),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveUtils.borderRadius(context),
+                    ),
+                  ),
+                ),
+                child: Text(
+                  'Create Account',
+                  style: TextStyle(
+                    fontSize: ResponsiveUtils.fontSize(context, mobile: 16),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

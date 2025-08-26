@@ -38,6 +38,7 @@ dependencies:
   # Utils
   uuid: ^4.1.0
   intl: ^0.18.1
+  geolocator: ^10.1.0
   
   # Icons
   cupertino_icons: ^1.0.6

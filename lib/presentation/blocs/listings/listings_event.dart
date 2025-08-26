@@ -17,3 +17,12 @@ class SearchListings extends ListingsEvent {
   @override
   List<Object> get props => [query];
 }
+
+class FilterListings extends ListingsEvent {
+  final SearchFilters filters;
+
+  const FilterListings(this.filters);
+
+  @override
+  List<Object> get props => [filters];
+}
